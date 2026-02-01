@@ -27,12 +27,28 @@
         background: linear-gradient(
           135deg,
           #ff9a9e 0%,
-          #fecfef 50%,
-          #ffecd2 100%
+          #fecfef 25%,
+          #ffecd2 50%,
+          #ffc3a0 75%,
+          #ff9a9e 100%
         );
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
       }
 
       /* Floating hearts background */
@@ -45,6 +61,68 @@
         pointer-events: none;
         z-index: 1;
         overflow: hidden;
+      }
+
+      /* Twinkling stars */
+      .star {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        animation: twinkle linear infinite;
+      }
+
+      @keyframes twinkle {
+        0%, 100% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.5);
+        }
+      }
+
+      /* Moving clouds */
+      .cloud {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 100px;
+        opacity: 0.6;
+        animation: moveCloud linear infinite;
+      }
+
+      .cloud::before,
+      .cloud::after {
+        content: '';
+        position: absolute;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 100px;
+      }
+
+      .cloud::before {
+        width: 50px;
+        height: 50px;
+        top: -25px;
+        left: 10px;
+      }
+
+      .cloud::after {
+        width: 60px;
+        height: 60px;
+        top: -30px;
+        right: 10px;
+      }
+
+      @keyframes moveCloud {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(calc(100vw + 200px));
+        }
       }
 
       .heart {
@@ -85,16 +163,73 @@
         font-family: "Pacifico", cursive;
         font-size: clamp(2rem, 5vw, 3.5rem);
         color: #ff1744;
-        margin-bottom: 40px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        animation: fadeInDown 1s ease-out;
+        margin-bottom: 20px;
+        text-shadow: 
+          0 0 10px rgba(255, 23, 68, 0.8),
+          0 0 20px rgba(255, 23, 68, 0.6),
+          0 0 30px rgba(255, 23, 68, 0.4),
+          2px 2px 4px rgba(0, 0, 0, 0.2);
+        animation: fadeInDown 1s ease-out, glow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes glow {
+        from {
+          text-shadow: 
+            0 0 10px rgba(255, 23, 68, 0.8),
+            0 0 20px rgba(255, 23, 68, 0.6),
+            0 0 30px rgba(255, 23, 68, 0.4),
+            2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        to {
+          text-shadow: 
+            0 0 20px rgba(255, 23, 68, 1),
+            0 0 30px rgba(255, 23, 68, 0.8),
+            0 0 40px rgba(255, 23, 68, 0.6),
+            2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
       }
 
       .highlight-name {
         font-size: 1.15em;
         color: #c44569;
         font-weight: bold;
-        text-shadow: 3px 3px 6px rgba(196, 69, 105, 0.3);
+        text-shadow: 
+          0 0 15px rgba(196, 69, 105, 0.8),
+          3px 3px 6px rgba(196, 69, 105, 0.3);
+        display: inline-block;
+        animation: nameGlow 1.5s ease-in-out infinite alternate;
+      }
+
+      @keyframes nameGlow {
+        from {
+          transform: scale(1);
+          text-shadow: 
+            0 0 15px rgba(196, 69, 105, 0.8),
+            3px 3px 6px rgba(196, 69, 105, 0.3);
+        }
+        to {
+          transform: scale(1.05);
+          text-shadow: 
+            0 0 25px rgba(196, 69, 105, 1),
+            3px 3px 8px rgba(196, 69, 105, 0.5);
+        }
+      }
+
+      /* Countdown timer */
+      .countdown {
+        font-family: "Quicksand", sans-serif;
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        color: #d81b60;
+        margin-bottom: 30px;
+        font-weight: 600;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1.5s ease-out;
+      }
+
+      .countdown-number {
+        font-size: 1.3em;
+        color: #c44569;
+        font-weight: bold;
       }
 
       @keyframes fadeInDown {
@@ -334,8 +469,12 @@
     <!-- Main content -->
     <div class="container">
       <h1 class="main-heading" id="mainHeading">
-        <span class="highlight-name">Shruti</span>, Be My Valentine? 💖
+        <span class="highlight-name">Shruti</span><span id="typewriter">, Be My Valentine? 💖</span>
       </h1>
+      
+      <div class="countdown" id="countdown">
+        ⏰ Valentine's Day in <span class="countdown-number" id="daysLeft">0</span> days! 💝
+      </div>
 
       <div class="buttons-container" id="buttonsContainer">
         <button class="btn btn-yes" id="yesBtn">YES 💕</button>
@@ -398,6 +537,75 @@
                 heart.style.animationDelay = Math.random() * 5 + 's';
                 heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
                 heartsContainer.appendChild(heart);
+            }
+        }
+
+        // Create twinkling stars
+        function createStars() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                heartsContainer.appendChild(star);
+            }
+        }
+
+        // Create moving clouds
+        function createClouds() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            
+            for (let i = 0; i < 5; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.style.width = (Math.random() * 100 + 80) + 'px';
+                cloud.style.height = (Math.random() * 40 + 40) + 'px';
+                cloud.style.top = (Math.random() * 60 + 10) + '%';
+                cloud.style.animationDuration = (Math.random() * 30 + 40) + 's';
+                cloud.style.animationDelay = Math.random() * 10 + 's';
+                heartsContainer.appendChild(cloud);
+            }
+        }
+
+        // Typewriter effect
+        function typewriterEffect() {
+            const text = ', Be My Valentine? 💖';
+            const element = document.getElementById('typewriter');
+            element.textContent = '';
+            let index = 0;
+            
+            function type() {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(type, 100);
+                }
+            }
+            
+            setTimeout(type, 500);
+        }
+
+        // Calculate days until Valentine's Day
+        function updateCountdown() {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            let valentinesDay = new Date(currentYear, 1, 14); // Feb 14
+            
+            // If Valentine's Day has passed this year, calculate for next year
+            if (today > valentinesDay) {
+                valentinesDay = new Date(currentYear + 1, 1, 14);
+            }
+            
+            const timeDiff = valentinesDay - today;
+            const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            
+            const daysElement = document.getElementById('daysLeft');
+            if (daysElement) {
+                daysElement.textContent = daysLeft;
             }
         }
 
@@ -557,6 +765,10 @@
         // Initialize
         window.addEventListener('load', () => {
             createFloatingHearts();
+            createStars();
+            createClouds();
+            typewriterEffect();
+            updateCountdown();
         });
 
         // Handle window resize
